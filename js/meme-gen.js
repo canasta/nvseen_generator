@@ -5,6 +5,8 @@ let size_select = 1;
 
 const draw_canvas = () => {
     const canvas = document.getElementById("meme");
+    canvas.width = canvas_width * size_select;
+    canvas.height = canvas_height * size_select;
 
     if (canvas.getContext) {
         const ctx = canvas.getContext("2d");
@@ -37,7 +39,9 @@ const draw_canvas = () => {
                 lines = [text];
             }
             for (let i=0; i < lines.length; i++) {
-                ctx.fillText(lines[i], 150, 280 - (lines.length - 1) * parseInt(font_size/2) + i * font_size);
+                ctx.fillText(lines[i],
+                    150 * size_select,
+                    (280 - (lines.length - 1) * parseInt(font_size/2) + i * font_size) * size_select);
             }
         }
     } else {
@@ -53,4 +57,19 @@ window.onload = () => {
         event.target.href = document.getElementById("meme").toDataURL("image/png")
     );
     document.getElementById("text").onchange = draw_canvas;
+    // document.querySelector("input[name='size']").addEventListener('change',
+    //     () => {
+    //         size_select = document.querySelector("input[name='size']:checked").value;
+    //         console.log('changed');
+    //         draw_canvas();
+    //     }
+    // );
+    document.querySelectorAll("input[name='size']").forEach(qs => {
+        qs.onchange = (ev) => {
+            if (ev.target.checked) {
+                size_select = ev.target.value;
+                draw_canvas();
+            }
+        }
+    });
 }
