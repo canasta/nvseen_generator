@@ -5,7 +5,8 @@ body {
 }
 
 div#container {
-    width: 1200px;
+    min-width: 640px;
+    max-width: 1200px;
     background-color: #eee;
     min-height: 100%;
     margin: 0 auto;
