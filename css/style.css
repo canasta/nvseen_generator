@@ -1,0 +1,12 @@
+body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+div#container {
+    width: 1200px;
+    background-color: #eee;
+    min-height: 100%;
+    margin: 0 auto;
+}
