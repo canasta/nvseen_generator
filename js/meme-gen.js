@@ -1,7 +1,9 @@
 const canvas_width = 640;
 const canvas_height = 360;
 const font_size = 30;
+
 let size_select = 1;
+let line_split = 'auto';
 
 const draw_canvas = () => {
     const canvas = document.getElementById("meme");
@@ -26,22 +28,41 @@ const draw_canvas = () => {
             ctx.textAlign = "center";
         
             let text = document.getElementById("text").value;
-            text = text.trim()
+
             let lines = [];
-            if (text.length >= 8) {
-                const line_counts = parseInt((text.length - 1) / 8) + 1;
-                const line_length = parseInt(text.length/line_counts);
-                for (let i=0; i < line_counts - 1; i++){
-                    lines.push(text.slice(i * line_length, (i+1) * line_length).trim());
+            if (line_split == 'auto') {
+                if (text.length >= 8) {
+                    text = text.trim()
+                    const line_counts = parseInt((text.length - 1) / 8) + 1;
+                    const line_length = parseInt(text.length/line_counts);
+                    for (let i=0; i < line_counts - 1; i++){
+                        lines.push(text.slice(i * line_length, (i+1) * line_length).trim());
+                    }
+                    lines.push(text.slice(line_length * (line_counts - 1)).trim());
+                } else {
+                    lines = [text];
                 }
-                lines.push(text.slice(line_length * (line_counts - 1)).trim());
-            } else {
-                lines = [text];
+            } else if (line_split == 'slash') {
+                lines = text.split('/');
+            } else if (line_split == 'one') {
+                lines.push(text);
             }
+            
+            let max_line_length = 0;
+            let _font_size = font_size;
+            lines.forEach(element => {
+                if (element.length > max_line_length) max_line_length = element.length;
+            });
+            if (max_line_length > 7 || lines.length > 4) {
+                _font_size = Math.min(parseInt(300 / max_line_length / 2) * 2, parseInt(50 / lines.length) * 2);
+                ctx.font = _font_size * size_select + "px 궁서체";
+                console.log(_font_size);
+            }
+
             for (let i=0; i < lines.length; i++) {
                 ctx.fillText(lines[i],
                     150 * size_select,
-                    (280 - (lines.length - 1) * parseInt(font_size/2) + i * font_size) * size_select);
+                    (275 - (lines.length - 1) * parseInt(_font_size/2) + i * _font_size) * size_select);
             }
         }
     } else {
@@ -68,6 +89,15 @@ window.onload = () => {
         qs.onchange = (ev) => {
             if (ev.target.checked) {
                 size_select = ev.target.value;
+                draw_canvas();
+            }
+        }
+    });
+    
+    document.querySelectorAll("input[name='linesplit']").forEach(qs => {
+        qs.onchange = (ev) => {
+            if (ev.target.checked) {
+                line_split = ev.target.value;
                 draw_canvas();
             }
         }
