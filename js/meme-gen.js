@@ -62,7 +62,7 @@ const draw_canvas = () => {
             for (let i=0; i < lines.length; i++) {
                 ctx.fillText(lines[i],
                     150 * size_select,
-                    (275 - (lines.length - 1) * parseInt(_font_size/2) + i * _font_size) * size_select);
+                    (280 - (lines.length - 1) * parseInt(_font_size/2) + i * _font_size) * size_select);
             }
         }
     } else {
